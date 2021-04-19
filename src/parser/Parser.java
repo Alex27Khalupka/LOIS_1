@@ -29,10 +29,11 @@ public class Parser {
         uniqueSubFormulas = new ArrayList<>();
         message = "";
         try {
-            // checks if all symbols are correct
-            checkSymbols();
             // checks if bracket placement is correct
             checkBrackets();
+
+            // checks if all symbols are correct
+            checkSymbols();
 
             // create parse tree of the expression
             ExpressionTree tree = new ExpressionTree(expression, this);
@@ -57,11 +58,26 @@ public class Parser {
                 }
             }
 
-            System.out.println("The number of sub formulas: " + uniqueSubFormulas.size());
-            for (int i = 0; i<uniqueSubFormulas.size(); i++) {
-                System.out.println((i + 1) + ". " + uniqueSubFormulas.get(i));
+            int i = 0;
+            int tmp = 0;
+            while (i < uniqueSubFormulas.size()) {
+                for (int j = 0; j < uniqueSubFormulas.get(i).length(); j++){
+                    if (Config.NO_CONST.contains("" + uniqueSubFormulas.get(i).charAt(j))) {
+                        tmp = 1;
+                        break;
+                    }
+                }
+                if (tmp == 0) {
+                    uniqueSubFormulas.remove(i);
+                    i--;
+                }
+                i++;
             }
 
+            System.out.println("The number of sub formulas: " + uniqueSubFormulas.size());
+            for (i = 0; i < uniqueSubFormulas.size(); i ++){
+                System.out.println((i + 1) + ". " + uniqueSubFormulas.get(i));
+            }
 
         } catch (FormulaException FormulaException) {
             message = "Formula Error: ";

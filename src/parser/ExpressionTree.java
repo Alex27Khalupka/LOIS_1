@@ -92,7 +92,7 @@ public class ExpressionTree {
     }
 
     private String searchSign(String expression, int pointer) {
-        if (expression.charAt(pointer) == '!' || expression.charAt(pointer) == '~')
+        if (expression.charAt(pointer) == '!' || expression.charAt(pointer) == '~' || Config.SYMBOLS.contains("" + expression.charAt(pointer)))
             return expression.charAt(pointer) + "";
         return "" + expression.charAt(pointer) + expression.charAt(pointer + 1);
     }

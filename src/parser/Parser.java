@@ -1,7 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 // Лабораторная работа №1 по дисциплине ЛОИС
-// Вариант С: Проверить, является ли формула СКНФ
-// Выполнена студентом грруппы 821701 БГУИР Клевцевич Александр Владимирович
+// Вариант А: Подсчитать количество подформул в формуле сокращенной логики высказываний
+// Выполнена студентом грруппы 821701 БГУИР Холупко Александром Андреевичем
+// Оказал помощь в реализации некоторых функций Клевцевич Александр Викторович
 // Класс предназначен для парсинга формул
 
 package parser;
@@ -38,6 +39,11 @@ public class Parser {
 
             // checks if all negations are correct (no double negation, etc.)
             checkNegation(tree, 0);
+
+            if (ELEMENTS.size() == 0) {
+                System.out.println("Invalid syntax!");
+                System.exit(0);
+            }
 
             // finds
             searchSubFormulas(tree);
@@ -89,6 +95,7 @@ public class Parser {
         return "" + expression.charAt(pointer) + expression.charAt(pointer + 1);
     }
 
+    // Автор: Клевцевич А.В, гр 821701.
     private void checkBrackets() throws FormulaException {
         if (EXPRESSION.contains(")(")) {
             throw new FormulaException(3);
@@ -121,7 +128,9 @@ public class Parser {
 
     private void searchSubFormulas(ExpressionTree tree) {
         if (!"!".equals(tree.getOperation())) {
-            subFormulas.add(tree.getExpression());
+            if (!tree.getExpression().equals("1") && !tree.getExpression().equals("0")){
+                subFormulas.add(tree.getExpression());
+            }
             if (tree.getOperation() != null) {
                 searchSubFormulas(tree.getLeft());
             }
@@ -129,12 +138,18 @@ public class Parser {
                 searchSubFormulas(tree.getRight());
             }
         } else {
+            if (!tree.getExpression().equals("1") && !tree.getExpression().equals("0")){
+                subFormulas.add(tree.getExpression());
+            }
             subFormulas.add(tree.getExpression());
-            searchSubFormulas(tree.getLeft());
+            if (tree.getOperation() != null) {
+                searchSubFormulas(tree.getLeft());
+            }
         }
 
     }
 
+    // Автор: Клевцевич А.В, гр 821701.
     private void checkNegation(ExpressionTree tree, int code) throws FormulaException {
         if (code == 0) {
             if ("!".equals(tree.getOperation())) {
@@ -164,7 +179,9 @@ public class Parser {
     }
 
     public void addElements(String element) {
-        ELEMENTS.add(element);
+        if (Config.SYMBOLS.contains(element)) {
+            ELEMENTS.add(element);
+        }
     }
 
 }

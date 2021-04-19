@@ -38,8 +38,6 @@ public class Parser {
             // create parse tree of the expression
             ExpressionTree tree = new ExpressionTree(expression, this);
 
-            // checks if all negations are correct (no double negation, etc.)
-            checkNegation(tree, 0);
 
             if (ELEMENTS.size() == 0) {
                 System.out.println("Invalid syntax!");
@@ -59,24 +57,11 @@ public class Parser {
             }
 
             int i = 0;
-            int tmp = 0;
-            while (i < uniqueSubFormulas.size()) {
-                for (int j = 0; j < uniqueSubFormulas.get(i).length(); j++){
-                    if (Config.NO_CONST.contains("" + uniqueSubFormulas.get(i).charAt(j))) {
-                        tmp = 1;
-                        break;
-                    }
-                }
-                if (tmp == 0) {
-                    uniqueSubFormulas.remove(i);
-                    i--;
-                }
-                i++;
-            }
 
             System.out.println("The number of sub formulas: " + uniqueSubFormulas.size());
+            System.out.println("1. " + expression);
             for (i = 0; i < uniqueSubFormulas.size(); i ++){
-                System.out.println((i + 1) + ". " + uniqueSubFormulas.get(i));
+                System.out.println((i + 2) + ". " + uniqueSubFormulas.get(i));
             }
 
         } catch (FormulaException FormulaException) {
@@ -168,7 +153,7 @@ public class Parser {
     // Автор: Клевцевич А.В, гр 821701.
     private void checkNegation(ExpressionTree tree, int code) throws FormulaException {
         if (code == 0) {
-            if ("!".equals(tree.getOperation())) {
+            if ("!".equals(tree.getOperation()) || "~".equals(tree.getOperation())) {
                 if (Objects.isNull(tree.getRight())) {
                     checkNegation(tree.getLeft(), 1);
                     return;
@@ -182,7 +167,7 @@ public class Parser {
             if (Objects.nonNull(tree.getRight())) {
                 throw new FormulaException(10);
             }
-            if ("!".equals(tree.getOperation())) {
+            if ("!".equals(tree.getOperation()) || "~".equals(tree.getOperation())) {
                 throw new FormulaException(12);
             }
             if (Objects.nonNull(tree.getLeft())) checkNegation(tree.getLeft(), 1);

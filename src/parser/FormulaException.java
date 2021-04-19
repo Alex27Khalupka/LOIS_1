@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 // Лабораторная работа №1 по дисциплине ЛОИС
-// Вариант С: Проверить, является ли формула СКНФ
-// Выполнена студентом грруппы 821701 БГУИР Клевцевич Александр Владимирович
+// Вариант А: Подсчитать количество подформул в формуле сокращенной логики высказываний
+// Выполнена студентом грруппы 821701 БГУИР Холупко Александром Андреевичем
 // Класс предназначен для исключений
 
 package parser;
@@ -33,16 +33,8 @@ public class FormulaException extends Exception {
                 message = "Instead of a conjunction, another operation is found!";
                 break;
             }
-            case 5: {
-                message = "Disjunction does not consist of all the variables in the list!";
-                break;
-            }
             case 6: {
                 message = "Unknown character used!";
-                break;
-            }
-            case 7: {
-                message = "Disjunction has a conjunction operation!";
                 break;
             }
             case 8: {

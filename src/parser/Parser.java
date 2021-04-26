@@ -21,7 +21,7 @@ public class Parser {
     private final Set<String> ELEMENTS;
     private final List<String> ATOMS;
 
-    public Parser(String expression) {
+    public Parser(String expression) throws Exception{
         this.EXPRESSION = expression;
         ELEMENTS = new HashSet<>();
         ATOMS = new ArrayList<>();
@@ -29,6 +29,11 @@ public class Parser {
         uniqueSubFormulas = new ArrayList<>();
         message = "";
         try {
+
+            if (expression.contains("!!")){
+                System.out.println("Invalid syntax!");
+                System.exit(0);
+            }
             // checks if bracket placement is correct
             checkBrackets();
 
@@ -37,6 +42,8 @@ public class Parser {
 
             // create parse tree of the expression
             ExpressionTree tree = new ExpressionTree(expression, this);
+
+            checkBrackets();
 
 
             if (ELEMENTS.size() == 0) {
@@ -58,7 +65,7 @@ public class Parser {
 
             int i = 0;
 
-            System.out.println("The number of sub formulas: " + uniqueSubFormulas.size());
+            System.out.println("The number of sub formulas: " + (uniqueSubFormulas.size() + 1));
             System.out.println("1. " + expression);
             for (i = 0; i < uniqueSubFormulas.size(); i ++){
                 System.out.println((i + 2) + ". " + uniqueSubFormulas.get(i));
@@ -166,9 +173,6 @@ public class Parser {
         } else {
             if (Objects.nonNull(tree.getRight())) {
                 throw new FormulaException(10);
-            }
-            if ("!".equals(tree.getOperation()) || "~".equals(tree.getOperation())) {
-                throw new FormulaException(12);
             }
             if (Objects.nonNull(tree.getLeft())) checkNegation(tree.getLeft(), 1);
         }

@@ -31,7 +31,15 @@ public class Main {
         }
 
         System.out.println("\nExpression : " + expression + "\n");
-        Parser parser = new Parser(expression);
+        Parser parser = null;
+        try {
+            parser = new Parser(expression);
+        }
+        catch (Exception Exception){
+            System.out.println("Invalid syntax");
+            System.exit(0);
+        }
         System.out.println(parser.getMessage());
+
     }
 }

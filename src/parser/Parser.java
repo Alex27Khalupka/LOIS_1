@@ -43,7 +43,7 @@ public class Parser {
             // create parse tree of the expression
             ExpressionTree tree = new ExpressionTree(expression, this);
 
-            checkBrackets();
+            checkNegation(tree, 0);
 
 
             if (ELEMENTS.size() == 0) {
@@ -57,6 +57,7 @@ public class Parser {
                 throw new FormulaException(9);
             }
 
+            uniqueSubFormulas.add(expression);
             for (int i = 1; i<subFormulas.size(); i++) {
                 if (!uniqueSubFormulas.contains(subFormulas.get(i))) {
                     uniqueSubFormulas.add(subFormulas.get(i));
@@ -65,10 +66,9 @@ public class Parser {
 
             int i = 0;
 
-            System.out.println("The number of sub formulas: " + (uniqueSubFormulas.size() + 1));
-            System.out.println("1. " + expression);
+            System.out.println("The number of sub formulas: " + (uniqueSubFormulas.size()));
             for (i = 0; i < uniqueSubFormulas.size(); i ++){
-                System.out.println((i + 2) + ". " + uniqueSubFormulas.get(i));
+                System.out.println((i+1) + ". " + uniqueSubFormulas.get(i));
             }
 
         } catch (FormulaException FormulaException) {
@@ -160,7 +160,7 @@ public class Parser {
     // Автор: Клевцевич А.В, гр 821701.
     private void checkNegation(ExpressionTree tree, int code) throws FormulaException {
         if (code == 0) {
-            if ("!".equals(tree.getOperation()) || "~".equals(tree.getOperation())) {
+            if ("!".equals(tree.getOperation())) {
                 if (Objects.isNull(tree.getRight())) {
                     checkNegation(tree.getLeft(), 1);
                     return;
